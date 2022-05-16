@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.String.format;
 import static javax.swing.JOptionPane.*;
 
 public class Main {
@@ -39,24 +40,21 @@ public class Main {
                     options,
                     options[0]
             );
+
+            String name = showInputDialog("NAME");
+            Integer hours = Integer.valueOf(showInputDialog("HOURS"));
+            Double valuePerHour = Double.valueOf(showInputDialog("VALUE PER HOUR"));
+
             if (isOutsourced.equals("Y")) {
-                OutsourcedEmployeeEntity employee = new OutsourcedEmployeeEntity();
-                employee.setName(showInputDialog("NAME"));
-                employee.setHours(Integer.valueOf(showInputDialog("HOURS")));
-                employee.setValuePerHour(Double.valueOf(showInputDialog("VALUE PER HOUR")));
-                employee.setAditionalCharge(Double.valueOf(showInputDialog("ADITIONAL CHARGE")));
-                employeesList.add(employee);
+                Double aditionalCharge = Double.valueOf(showInputDialog("ADITIONAL CHARGE"));
+                employeesList.add(new OutsourcedEmployeeEntity(name, hours, valuePerHour, aditionalCharge));
             } else {
-                EmployeeEntity employee = new EmployeeEntity();
-                employee.setName(showInputDialog("NAME"));
-                employee.setHours(Integer.valueOf(showInputDialog("HOURS")));
-                employee.setValuePerHour(Double.valueOf(showInputDialog("VALUE PER HOUR")));
-                employeesList.add(employee);
+                employeesList.add(new EmployeeEntity(name, hours, valuePerHour));
             }
         }
 
-        StringBuilder response = new StringBuilder("PAYMENTS\n");
-        employeesList.forEach(employee -> response.append(employee.getName()).append(" - ").append(employee.pay()).append("\n"));
+        StringBuilder response = new StringBuilder("PAYMENTS:\n");
+        employeesList.forEach(employee -> response.append(employee.getName()).append(" - ").append(format("%.2f", employee.pay())).append("\n"));
 
         showMessageDialog(null, response);
     }
